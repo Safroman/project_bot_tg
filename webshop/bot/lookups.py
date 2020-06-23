@@ -1,0 +1,6 @@
+category_lookup = 'category'
+product_lookup = 'product'
+separator = '_'
+cart_lookup = 'cart'
+discount_lookup = 'discount'
+back_lookup = ''
