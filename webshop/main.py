@@ -4,6 +4,7 @@ from flask import Flask, request, abort
 from telebot.types import Update
 from api.api_main import api_app
 import time
+from production import VERSION
 
 
 app = Flask(__name__)
@@ -21,15 +22,21 @@ def webhook():
 
 
 if __name__ == '__main__':
-    api_app.run(debug=True)
-    start_bot()
-    bot.polling()
 
-    bot.remove_webhook()
-    time.sleep(1)
+    if VERSION == 'production':
+        api_app.run(debug=True)
+        start_bot()
 
-    bot.set_webhook(config.WEBHOOK_URL,
-                    certificate=open('webhook_cert.pem', 'r')
-                   )
+        bot.remove_webhook()
+        time.sleep(1)
 
-    app.run(debug=True)
+        bot.set_webhook(config.WEBHOOK_URL,
+                        certificate=open('webhook_cert.pem', 'r')
+                       )
+
+        app.run(debug=True)
+
+    else:
+        start_bot()
+        bot.polling()
+        app.run(debug=True)
