@@ -1,5 +1,7 @@
 import mongoengine as me
 import datetime
+from mongoengine import ValidationError
+import os
 
 
 me.connect('webshop_db')
@@ -8,9 +10,9 @@ me.connect('webshop_db')
 class Category(me.Document):
 
     title = me.StringField(min_length=1, max_length=512)
-    description = me.StringField(min_length=2, max_lenght=4096, default=None)
-    subcategories = me.ListField(me.ReferenceField('self'))
-    parent = me.ReferenceField('self', default=None)
+    description = me.StringField(min_length=2, max_lenght=4096, default='')
+    subcategories = me.ListField(me.ReferenceField('self'), default=[])
+    parent = me.ReferenceField('self')
 
     def get_products(self):
         return Product.objects(category=self)
@@ -38,10 +40,50 @@ class Category(me.Document):
     def has_parent(self):
         return bool(self.parent)
 
-    #
-    # @property
-    # def title(self):
-    #     return self.title
+    @classmethod
+    def create(cls, parent_obj, **kwargs):
+        data = dict(**kwargs)
+        if parent_obj:
+            data['parent'] = parent_obj
+        return cls.objects.create(**data)
+
+    @classmethod
+    def read(cls, category_id):
+        try:
+            obj = cls.objects.get(id=category_id)
+        except ValidationError:
+            obj = None
+        return obj
+
+    @classmethod
+    def update(cls, category_id, **kwargs):
+
+        category_obj = Category.objects.get(id=category_id)
+
+        if 'title' in kwargs.keys():
+            category_obj.title = kwargs['title']
+        if 'description' in kwargs.keys():
+            category_obj.description = kwargs['description']
+        if 'parent' in kwargs.keys():
+            parent = Category.objects.get(id=kwargs['parent'])
+            category_obj.parent = parent
+        if 'add_subcategories' in kwargs.keys():
+            for _id in kwargs['add_subcategories']:
+                subcategory = Category.objects.get(id=_id)
+                if subcategory in category_obj.subcategories:
+                    pass
+                else:
+                    category_obj.subcategories.append(subcategory)
+        if 'del_subcategories' in kwargs.keys():
+            for _id in kwargs['del_subcategories']:
+                subcategory = Category.objects.get(id=_id)
+                category_obj.subcategories.remove(subcategory)
+        category_obj.save()
+        return category_obj
+
+    @classmethod
+    def delete(cls, category_id):
+        cls.objects(id=category_id).delete()
 
 
 class Attrs(me.EmbeddedDocument):
@@ -59,8 +101,8 @@ class Product(me.Document):
     created = me.DateTimeField(default=datetime.datetime.now())
     price = me.DecimalField(required=True)
     discount = me.IntField(min_value=0, max_value=100, default=0)
-    in_stock = me.BooleanField(default=True)
-    image = me.FileField(required=True)
+    in_stock = me.IntField(default=1)
+    image = me.FileField(required=False)
     category = me.ReferenceField('Category')
     attrs = me.EmbeddedDocumentField(Attrs)
 
@@ -72,6 +114,69 @@ class Product(me.Document):
     def get_discount_products(cls):
         return cls.objects(discount__ne=0, in_stock=True)
 
+    @classmethod
+    def create(cls, **kwargs):
+        data = dict(**kwargs)
+        image_name = data.pop('image_name')
+        data['category'] = Category.objects.get(id=kwargs['category_id'])
+        del data['category_id']
+        product = cls.objects.create(**data)
+
+        path = os.path.abspath('../db/pics/' + image_name + '.jpg')
+        with open(path, 'rb') as picture:
+            product.image.replace(picture, content_type='image/jpg')
+            product.save()
+
+        return product
+
+    @classmethod
+    def read(cls, product_id):
+        try:
+            obj = cls.objects.get(id=product_id)
+        except ValidationError:
+            obj = None
+        return obj
+
+    @classmethod
+    def update(cls, product_id, **kwargs):
+
+        product_obj = Product.objects.get(id=product_id)
+
+        if 'title' in kwargs.keys():
+            product_obj.title = kwargs['title']
+        if 'description' in kwargs.keys():
+            product_obj.description = kwargs['description']
+        if 'price' in kwargs.keys():
+            product_obj.price = kwargs['price']
+        if 'discount' in kwargs.keys():
+            product_obj.discount = kwargs['discount']
+        if 'in_stock' in kwargs.keys():
+            product_obj.in_stock = kwargs['in_stock']
+        if 'attrs' in kwargs.keys():
+            attrs = kwargs['attrs']
+            if 'height' in attrs.keys():
+                product_obj.attrs.height = attrs['height']
+            if 'length' in attrs.keys():
+                product_obj.attrs.length = attrs['length']
+            if 'width' in attrs.keys():
+                product_obj.attrs.width = attrs['width']
+            if 'weight' in attrs.keys():
+                product_obj.attrs.weight = attrs['weight']
+        if 'category_id' in kwargs.keys():
+            category = Category.objects.get(id=kwargs['category_id'])
+            product_obj.category = category
+        if 'image_name' in kwargs.keys():
+            path = os.path.abspath('../db/pics/' + kwargs['image_name'] + '.jpg')
+            with open(path, 'rb') as picture:
+                product_obj.image.replace(picture, content_type='image/jpg')
+
+        product_obj.save()
+        return product_obj
+
+    @classmethod
+    def delete(cls, product_id):
+        cls.objects(id=product_id).delete()
+
 
 class User(me.Document):
 
@@ -81,7 +186,67 @@ class User(me.Document):
     status = me.StringField()
     phone = me.StringField()
     address = me.StringField()
-    cart = me.ListField(me.ReferenceField(Product))
+    cart = me.ListField(me.ReferenceField('Product'))
+
+    def add_to_cart(self, product):
+        self.cart.append(product)
+        self.save()
+
+    def plus_cart(self, product):
+        self.cart.append(product)
+        self.save()
+
+    def minus_cart(self, product):
+        self.cart.remove(product)
+        self.save()
+
+    def remove_from_cart(self, product):
+        self.cart[:] = (prod for prod in self.cart if prod != product)
+        self.save()
+
+    @classmethod
+    def create(cls, **kwargs):
+        return cls.objects.create(**kwargs)
+
+    @classmethod
+    def read(cls, user_id):
+        try:
+            obj = cls.objects.get(id=user_id)
+        except ValidationError:
+            obj = None
+        return obj
+
+    @classmethod
+    def update(cls, user_id, **kwargs):
+
+        user_obj = User.objects.get(id=user_id)
+
+        if 'message_chat_id' in kwargs.keys():
+            user_obj.message_chat_id = kwargs['message_chat_id']
+        if 'name' in kwargs.keys():
+            user_obj.name = kwargs['name']
+        if 'surname' in kwargs.keys():
+            user_obj.surname = kwargs['surname']
+        if 'status' in kwargs.keys():
+            user_obj.status = kwargs['status']
+        if 'phone' in kwargs.keys():
+            user_obj.phone = kwargs['phone']
+        if 'address' in kwargs.keys():
+            user_obj.address = kwargs['address']
+        if 'add_to_cart' in kwargs.keys():
+            for _id in kwargs['add_to_cart']:
+                product = Product.objects.get(id=_id)
+                user_obj.plus_cart(product)
+        if 'del_from_cart' in kwargs.keys():
+            for _id in kwargs['del_from_cart']:
+                product = Product.objects.get(id=_id)
+                user_obj.minus_cart(product)
+        user_obj.save()
+        return user_obj
+
+    @classmethod
+    def delete(cls, user_id):
+        cls.objects(id=user_id).delete()
 
 
 class Text(me.Document):
@@ -94,3 +259,32 @@ class Text(me.Document):
 
     title = me.StringField(min_length=1, max_length=256, choices=TITLES.values(), unique=True)
     body = me.StringField(min_length=1, max_length=4096)
+
+    @classmethod
+    def create(cls, **kwargs):
+        cls.objects.create(**kwargs)
+
+    @classmethod
+    def read(cls, text_id):
+        try:
+            obj = cls.objects.get(id=text_id)
+        except ValidationError:
+            obj = None
+        return obj
+
+    @classmethod
+    def update(cls, text_id, **kwargs):
+
+        text_obj = Text.objects.get(id=text_id)
+
+        if 'title' in kwargs.keys():
+            text_obj.title = kwargs['title']
+        if 'body' in kwargs.keys():
+            text_obj.body = kwargs['body']
+
+        text_obj.save()
+        return text_obj
+
+    @classmethod
+    def delete(cls, text_id):
+        cls.objects(id=text_id).delete()

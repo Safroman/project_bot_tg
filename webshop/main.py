@@ -2,6 +2,8 @@ from webshop.bot.main import start_bot, bot
 from webshop.bot import config
 from flask import Flask, request, abort
 from telebot.types import Update
+from api.api_main import api_app
+import time
 
 
 app = Flask(__name__)
@@ -19,7 +21,15 @@ def webhook():
 
 
 if __name__ == '__main__':
-    bot.set_webhook(
-        config.WEBHOOK_URL,
-        certificate=open('webhook_cert.pem', 'r')
-    )
+    api_app.run(debug=True)
+    start_bot()
+    bot.polling()
+
+    bot.remove_webhook()
+    time.sleep(1)
+
+    bot.set_webhook(config.WEBHOOK_URL,
+                    certificate=open('webhook_cert.pem', 'r')
+                   )
+
+    app.run(debug=True)
