@@ -1,10 +1,10 @@
-from .bot.main import start_bot, bot
-from .bot import config
+from webshop.bot.main import start_bot, bot
+from webshop.bot import config
 from flask import Flask, request, abort
 from telebot.types import Update
-from .api.api_main import api_app
+from webshop.api.api_main import api_app
 import time
-from .production import VERSION
+from webshop.production import VERSION
 
 
 app = Flask(__name__)
