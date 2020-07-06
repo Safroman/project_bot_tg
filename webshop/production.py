@@ -1,1 +1,1 @@
-VERSION = 'develop'
+VERSION = 'production'
