@@ -192,6 +192,10 @@ class User(me.Document):
         self.cart.append(product)
         self.save()
 
+    def save_phone(self, phone_number):
+        self.phone = phone_number
+        self.save()
+
     def plus_cart(self, product):
         self.cart.append(product)
         self.save()
@@ -203,6 +207,17 @@ class User(me.Document):
     def remove_from_cart(self, product):
         self.cart[:] = (prod for prod in self.cart if prod != product)
         self.save()
+
+    @property
+    def cart_total(self):
+        def total_sum(cart_list):
+            if len(cart_list) == 0:
+                return 0
+            elif len(cart_list) == 1:
+                return cart_list[0].extended_price
+            else:
+                return cart_list[0].extended_price + total_sum(cart_list[1:])
+        return total_sum(self.cart)
 
     @classmethod
     def create(cls, **kwargs):
