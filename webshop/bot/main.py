@@ -2,7 +2,7 @@ from telebot import TeleBot
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
 from .config import TOKEN
-from ..db.models import Text, Category, Product, User
+from webshop.db.models import Text, Category, Product, User
 from .keyboards import START_KB, PRODUCTS_KB
 from .lookups import *
 
