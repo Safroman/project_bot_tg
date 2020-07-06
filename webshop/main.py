@@ -1,10 +1,10 @@
-from webshop.bot.main import start_bot, bot
-from webshop.bot import config
+from .bot.main import start_bot, bot
+from .bot import config
 from flask import Flask, request, abort
 from telebot.types import Update
-from api.api_main import api_app
+from .api.api_main import api_app
 import time
-from production import VERSION
+from .production import VERSION
 
 
 app = Flask(__name__)
@@ -25,7 +25,6 @@ if __name__ == '__main__':
 
     if VERSION == 'production':
         api_app.run(debug=True)
-        start_bot()
 
         bot.remove_webhook()
         time.sleep(1)
