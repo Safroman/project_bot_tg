@@ -16,7 +16,7 @@ def init_text():
         'cart_empty': 'В корзине нет товаров',
         'cart_total': 'Всего товаров на сумму ',
         'request_phone': 'Для подтверждения заказа поделитесь номером телефона',
-        'cart_checkout': 'Спасибо за заказ\nМенеджер свяжеться с вами для уточнения деталей доставки'
+        'cart_checkout': 'Спасибо за заказ\nМенеджер свяжется с вами для уточнения деталей доставки'
     }
 
     for key, value in TITLES.items():
@@ -267,5 +267,5 @@ if __name__ == '__main__':
     db_name = 'webshop_db'
     connect = me.connect(db_name)
 
-    init_db()
-    # drop_db(connect)
+    # init_db()
+    drop_db(connect)
