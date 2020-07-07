@@ -267,5 +267,5 @@ if __name__ == '__main__':
     db_name = 'webshop_db'
     connect = me.connect(db_name)
 
-    # init_db()
-    drop_db(connect)
+    init_db()
+    # drop_db(connect)
