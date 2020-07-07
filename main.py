@@ -31,7 +31,7 @@ if VERSION == 'production':
     bot.set_webhook(config.WEBHOOK_URL,
                     certificate=open('webhook_cert.pem', 'r')
                    )
-    app.run(debug=True)
+    # app.run(debug=True)
 
 else:
     bot.remove_webhook()
