@@ -54,7 +54,17 @@ class UserSchema(Schema):
     status = fields.String()
     phone = fields.String()
     address = fields.String()
-    cart = fields.List(fields.Nested(lambda: ProductSchema(only=("id", "title"))))
+    cart = fields.List(fields.Nested(lambda: ProductSchema(only=("id", "title"))), dump_only=True)
+    cart_total_message_id = fields.String(load_only=True)
+
+
+class OrderSchema(Schema):
+
+    id = fields.String(dump_only=True)
+    user = fields.Nested(UserSchema)
+    phone = fields.String()
+    timestamp = fields.DateTime()
+    products = fields.List(fields.Nested(lambda: ProductSchema(only=("id", "title"))))
 
 
 class TextSchema(Schema):

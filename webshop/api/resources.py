@@ -75,6 +75,28 @@ class UserResource(Resource):
         User.delete(user_id)
 
 
+class OrderResource(Resource):
+
+    def get(self, order_id):
+        return json.loads(OrderSchema().dumps(Order.read(order_id)))
+
+    def post(self):
+        data = json.dumps(request.json)
+        try:
+            data = OrderSchema().loads(data)
+            order = Order.create(**data)
+            res = json.loads(OrderSchema().dumps(order))
+        except ValidationError as err:
+            res = err.messages
+        return res
+
+    def put(self, order_id):
+        return json.loads(OrderSchema().dumps(Order.update(order_id, **request.json)))
+
+    def delete(self, order_id):
+        User.delete(order_id)
+
+
 class TextResource(Resource):
 
     def get(self, text_id):

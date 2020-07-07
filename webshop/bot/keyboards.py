@@ -5,5 +5,9 @@ START_KB = {
 }
 
 PRODUCTS_KB = {
-    'order': 'Добавить в корзину'
+    'to_cart': 'Добавить в корзину'
+}
+
+CART_KB = {
+    'order': 'Заказать'
 }

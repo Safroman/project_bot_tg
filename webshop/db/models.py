@@ -112,7 +112,7 @@ class Product(me.Document):
 
     @classmethod
     def get_discount_products(cls):
-        return cls.objects(discount__ne=0, in_stock=True)
+        return cls.objects(discount__ne=0, in_stock__ne=0)
 
     @classmethod
     def create(cls, **kwargs):
@@ -187,6 +187,7 @@ class User(me.Document):
     phone = me.StringField()
     address = me.StringField()
     cart = me.ListField(me.ReferenceField('Product'))
+    cart_total_message_id = me.StringField()
 
     def add_to_cart(self, product):
         self.cart.append(product)
@@ -204,9 +205,21 @@ class User(me.Document):
         self.cart.remove(product)
         self.save()
 
+    def empty_cart(self):
+        self.cart = []
+        self.save()
+
     def remove_from_cart(self, product):
         self.cart[:] = (prod for prod in self.cart if prod != product)
         self.save()
+
+    def set_total_message_id(self, message_id):
+        self.cart_total_message_id = message_id
+        self.save()
+
+    @property
+    def total_message_chat_id(self):
+        return self.cart_total_message_id
 
     @property
     def cart_total(self):
@@ -218,6 +231,10 @@ class User(me.Document):
             else:
                 return cart_list[0].extended_price + total_sum(cart_list[1:])
         return total_sum(self.cart)
+
+    @classmethod
+    def get_user(cls, message_chat_id):
+        return cls.objects.get(message_chat_id=message_chat_id)
 
     @classmethod
     def create(cls, **kwargs):
@@ -256,6 +273,7 @@ class User(me.Document):
             for _id in kwargs['del_from_cart']:
                 product = Product.objects.get(id=_id)
                 user_obj.minus_cart(product)
+
         user_obj.save()
         return user_obj
 
@@ -264,16 +282,85 @@ class User(me.Document):
         cls.objects(id=user_id).delete()
 
 
+class Order(me.Document):
+
+    user = me.ReferenceField('User')
+    phone = me.StringField()
+    time_stamp = me.DateTimeField()
+    products = me.ListField(me.ReferenceField('Product'))
+
+    @classmethod
+    def place_order(cls, user):
+        Order.objects.create(user=user, phone=user.phone, products=user.cart)
+
+    def plus_order(self, product):
+        self.products.append(product)
+        self.save()
+
+    def minus_order(self, product):
+        self.products.pop(product)
+        self.save()
+
+    @classmethod
+    def create(cls, **kwargs):
+        return cls.objects.create(**kwargs)
+
+    @classmethod
+    def read(cls, order_id):
+        try:
+            obj = cls.objects.get(id=order_id)
+        except ValidationError:
+            obj = None
+        return obj
+
+    @classmethod
+    def update(cls, order_id, **kwargs):
+
+        order_obj = Order.objects.get(id=order_id)
+
+        if 'user' in kwargs.keys():
+            order_obj.user = kwargs['user']
+        if 'phone' in kwargs.keys():
+            order_obj.phone = kwargs['phone']
+        if 'add_to_order' in kwargs.keys():
+            for _id in kwargs['add_to_order']:
+                product = Product.objects.get(id=_id)
+                order_obj.plus_order(product)
+        if 'del_from_order' in kwargs.keys():
+            for _id in kwargs['del_from_order']:
+                product = Product.objects.get(id=_id)
+                order_obj.minus_order(product)
+        order_obj.save()
+        return order_obj
+
+    @classmethod
+    def delete(cls, order_id):
+        cls.objects(id=order_id).delete()
+
+
 class Text(me.Document):
 
     TITLES = {
-        'greetings': 'Текст приветствия',
+        'greetings': 'Рады приветствовать Вас в нашем интернет магазине',
         'cart': 'Текст корзины',
-        'categories': 'Текст категории'
+        'discount_products': 'Сейчас есть скидки на такие товары',
+        'root_categories': 'В наличии есть такие категории',
+        'subcategories': 'В категории доступны такие подкатегории',
+        'products_text': 'Товары доступные в категории ',
+        'cart_added': 'Товар добавлен в корзину',
+        'cart_empty': 'В корзине нет товаров',
+        'cart_total': 'Всего товаров на сумму ',
+        'request_phone': 'Для подтверждения заказа поделитесь номером телефона',
+        'cart_checkout': 'Спасибо за заказ\nМенеджер свяжеться с вами для уточнения деталей доставки'
     }
 
-    title = me.StringField(min_length=1, max_length=256, choices=TITLES.values(), unique=True)
+    title = me.StringField(min_length=1, max_length=256, choices=TITLES.keys(), unique=True)
     body = me.StringField(min_length=1, max_length=4096)
+
+    @classmethod
+    def get_text(cls, title):
+        body = Text.objects.get(title=title).body
+        return body
 
     @classmethod
     def create(cls, **kwargs):
