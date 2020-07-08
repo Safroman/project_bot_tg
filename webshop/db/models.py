@@ -2,7 +2,7 @@ import mongoengine as me
 import datetime
 from mongoengine import ValidationError
 import os
-from .seeder import TITLES
+from webshop.db.seeder import TITLES
 
 
 me.connect('webshop_db')
