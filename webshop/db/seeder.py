@@ -1,4 +1,4 @@
-from .models import Text, Category, Product, Attrs
+from .models import Category, Product, Attrs, Text
 from random import randint, choice
 import mongoengine as me
 
