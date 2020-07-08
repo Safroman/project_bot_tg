@@ -56,7 +56,10 @@ class ProductResource(Resource):
 class UserResource(Resource):
 
     def get(self, user_id):
-        return json.loads(UserSchema().dumps(User.read(user_id)))
+        if user_id:
+            return json.loads(UserSchema().dumps(User.read(user_id)))
+        else:
+            return json.loads(UserSchema().dumps(User.objects.filter()))
 
     def post(self):
         data = json.dumps(request.json)
