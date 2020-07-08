@@ -29,7 +29,7 @@ if VERSION == 'production':
     bot.set_webhook(config.WEBHOOK_URL,
                     certificate=open('webhook_cert.pem', 'r'))
 
-    app.register_blueprint(api_bp)
+    app.register_blueprint(api_bp, url_prefix='/admin')
 
 else:
     bot.remove_webhook()
