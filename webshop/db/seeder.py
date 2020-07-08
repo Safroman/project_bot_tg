@@ -1,21 +1,6 @@
-from webshop.db.models import Text, Category, Product, Attrs
+from webshop.db.models import TITLES, Text, Category, Product, Attrs
 from random import randint, choice
 import mongoengine as me
-
-
-TITLES = {
-    'greetings': 'Рады приветствовать Вас в нашем интернет магазине',
-    'cart': 'Текст корзины',
-    'discount_products': 'Сейчас есть скидки на такие товары',
-    'root_categories': 'В наличии есть такие категории',
-    'subcategories': 'В категории доступны такие подкатегории',
-    'products_text': 'Товары доступные в категории ',
-    'cart_added': 'Товар добавлен в корзину',
-    'cart_empty': 'В корзине нет товаров',
-    'cart_total': 'Всего товаров на сумму ',
-    'request_phone': 'Для подтверждения заказа поделитесь номером телефона',
-    'cart_checkout': 'Спасибо за заказ\nМенеджер свяжется с вами для уточнения деталей доставки'
-}
 
 
 def init_text(titles):

@@ -2,7 +2,21 @@ import mongoengine as me
 import datetime
 from mongoengine import ValidationError
 import os
-from webshop.db.seeder import TITLES
+
+
+TITLES = {
+    'greetings': 'Рады приветствовать Вас в нашем интернет магазине',
+    'cart': 'Текст корзины',
+    'discount_products': 'Сейчас есть скидки на такие товары',
+    'root_categories': 'В наличии есть такие категории',
+    'subcategories': 'В категории доступны такие подкатегории',
+    'products_text': 'Товары доступные в категории ',
+    'cart_added': 'Товар добавлен в корзину',
+    'cart_empty': 'В корзине нет товаров',
+    'cart_total': 'Всего товаров на сумму ',
+    'request_phone': 'Для подтверждения заказа поделитесь номером телефона',
+    'cart_checkout': 'Спасибо за заказ\nМенеджер свяжется с вами для уточнения деталей доставки'
+}
 
 
 me.connect('webshop_db')
