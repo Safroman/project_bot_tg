@@ -6,7 +6,7 @@ import os
 
 me.connect('webshop_db')
 
-# TITLES = [text.title for text in Text.objects.filter()]
+TITLES = [text.title for text in Text.objects.filter()]
 
 
 class Category(me.Document):
