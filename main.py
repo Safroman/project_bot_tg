@@ -6,6 +6,7 @@ import time
 from webshop.production import VERSION
 from webshop.api.api_main import api_bp
 
+
 app = Flask(__name__)
 
 # if __name__ == '__main__':
@@ -28,7 +29,7 @@ if VERSION == 'production':
     bot.set_webhook(config.WEBHOOK_URL,
                     certificate=open('webhook_cert.pem', 'r'))
 
-    app.register_blueprint(api_bp, url_prefix='/admin')
+    app.register_blueprint(api_bp)
 
 else:
     bot.remove_webhook()
