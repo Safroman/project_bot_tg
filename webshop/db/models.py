@@ -258,7 +258,7 @@ class User(me.Document):
     @classmethod
     def read(cls, user_id):
         try:
-            obj = cls.objects.get(id=user_id)
+            obj = cls.objects.get(name=user_id)
         except ValidationError:
             obj = None
         return obj
