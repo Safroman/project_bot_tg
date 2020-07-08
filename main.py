@@ -5,9 +5,11 @@ from telebot.types import Update
 from webshop.api.api_main import api_app
 import time
 from webshop.production import VERSION
-
+import webshop.api.api_main as api
+from webshop.api.resources import *
 
 app = Flask(__name__)
+app.register_blueprint(texts_bp, url_prefix='/admin')
 
 
 # if __name__ == '__main__':

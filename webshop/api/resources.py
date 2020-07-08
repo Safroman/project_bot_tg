@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask import request
+from flask import request, Blueprint
 from webshop.db.models import *
 from webshop.api.schemas import *
 import json
@@ -117,3 +117,33 @@ class TextResource(Resource):
 
     def delete(self, text_id):
         Text.delete(text_id)
+
+
+texts_bp = Blueprint('api', __name__)
+
+
+@texts_bp.route('/texts/<text_id>', methods=['GET'])
+def get_text(text_id):
+    return json.loads(TextSchema().dumps(Text.read(text_id)))
+
+
+@texts_bp.route('/texts', methods=['POST'])
+def create_text():
+    data = json.dumps(request.json)
+    try:
+        data = TextSchema().loads(data)
+        text = Text.create(**data)
+        res = json.loads(TextSchema().dumps(text))
+    except ValidationError as err:
+        res = err.messages
+    return res
+
+
+@texts_bp.route('/texts/<text_id>', methods=['PUT'])
+def edit_text(text_id):
+    return json.loads(TextSchema().dumps(Text.update(text_id, **request.json)))
+
+
+@texts_bp.route('/texts/<text_id>', methods=['DELETE'])
+def delete_text(text_id):
+    Text.delete(text_id)

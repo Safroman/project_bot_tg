@@ -6,6 +6,8 @@ import os
 
 me.connect('webshop_db')
 
+# TITLES = [text.title for text in Text.objects.filter()]
+
 
 class Category(me.Document):
 
@@ -340,21 +342,7 @@ class Order(me.Document):
 
 class Text(me.Document):
 
-    TITLES = {
-        'greetings': 'Рады приветствовать Вас в нашем интернет магазине',
-        'cart': 'Текст корзины',
-        'discount_products': 'Сейчас есть скидки на такие товары',
-        'root_categories': 'В наличии есть такие категории',
-        'subcategories': 'В категории доступны такие подкатегории',
-        'products_text': 'Товары доступные в категории ',
-        'cart_added': 'Товар добавлен в корзину',
-        'cart_empty': 'В корзине нет товаров',
-        'cart_total': 'Всего товаров на сумму ',
-        'request_phone': 'Для подтверждения заказа поделитесь номером телефона',
-        'cart_checkout': 'Спасибо за заказ\nМенеджер свяжеться с вами для уточнения деталей доставки'
-    }
-
-    title = me.StringField(min_length=1, max_length=256, choices=TITLES.keys(), unique=True)
+    title = me.StringField(min_length=1, max_length=256, choices=TITLES, unique=True)
     body = me.StringField(min_length=1, max_length=4096)
 
     @classmethod
