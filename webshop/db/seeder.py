@@ -1,25 +1,26 @@
-from models import Text, Category, Product, Attrs
+from .models import Text, Category, Product, Attrs
 from random import randint, choice
 import mongoengine as me
 
 
-def init_text():
+TITLES = {
+    'greetings': 'Рады приветствовать Вас в нашем интернет магазине',
+    'cart': 'Текст корзины',
+    'discount_products': 'Сейчас есть скидки на такие товары',
+    'root_categories': 'В наличии есть такие категории',
+    'subcategories': 'В категории доступны такие подкатегории',
+    'products_text': 'Товары доступные в категории ',
+    'cart_added': 'Товар добавлен в корзину',
+    'cart_empty': 'В корзине нет товаров',
+    'cart_total': 'Всего товаров на сумму ',
+    'request_phone': 'Для подтверждения заказа поделитесь номером телефона',
+    'cart_checkout': 'Спасибо за заказ\nМенеджер свяжется с вами для уточнения деталей доставки'
+}
 
-    TITLES = {
-        'greetings': 'Рады приветствовать Вас в нашем интернет магазине',
-        'cart': 'Текст корзины',
-        'discount_products': 'Сейчас есть скидки на такие товары',
-        'root_categories': 'В наличии есть такие категории',
-        'subcategories': 'В категории доступны такие подкатегории',
-        'products_text': 'Товары доступные в категории ',
-        'cart_added': 'Товар добавлен в корзину',
-        'cart_empty': 'В корзине нет товаров',
-        'cart_total': 'Всего товаров на сумму ',
-        'request_phone': 'Для подтверждения заказа поделитесь номером телефона',
-        'cart_checkout': 'Спасибо за заказ\nМенеджер свяжется с вами для уточнения деталей доставки'
-    }
 
-    for key, value in TITLES.items():
+def init_text(titles):
+
+    for key, value in titles.items():
         Text.objects.create(
             title=key,
             body=value)
@@ -251,8 +252,8 @@ def seed_attrs():
         product.save()
 
 
-def init_db():
-    init_text()
+def init_db(titles):
+    init_text(titles)
     init_categories()
     init_products()
     put_pics()
@@ -267,5 +268,5 @@ if __name__ == '__main__':
     db_name = 'webshop_db'
     connect = me.connect(db_name)
 
-    init_db()
+    init_db(TITLES)
     # drop_db(connect)

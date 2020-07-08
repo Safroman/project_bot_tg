@@ -2,11 +2,10 @@ import mongoengine as me
 import datetime
 from mongoengine import ValidationError
 import os
+from .seeder import TITLES
 
 
 me.connect('webshop_db')
-
-TITLES = [text.title for text in Text.objects.filter()]
 
 
 class Category(me.Document):
@@ -342,7 +341,7 @@ class Order(me.Document):
 
 class Text(me.Document):
 
-    title = me.StringField(min_length=1, max_length=256, choices=TITLES, unique=True)
+    title = me.StringField(min_length=1, max_length=256, choices=TITLES.keys(), unique=True)
     body = me.StringField(min_length=1, max_length=4096)
 
     @classmethod
