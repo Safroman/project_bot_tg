@@ -63,12 +63,15 @@ class Category(me.Document):
         return cls.objects.create(**data)
 
     @classmethod
-    def read(cls, category_id):
-        try:
-            obj = cls.objects.get(id=category_id)
-        except ValidationError:
-            obj = None
-        return obj
+    def read(cls, category_id=None):
+        if category_id:
+            try:
+                obj = cls.objects.get(id=category_id)
+            except ValidationError:
+                obj = None
+            return obj
+        else:
+            return cls.objects.filter()
 
     @classmethod
     def update(cls, category_id, **kwargs):
@@ -145,12 +148,15 @@ class Product(me.Document):
         return product
 
     @classmethod
-    def read(cls, product_id):
-        try:
-            obj = cls.objects.get(id=product_id)
-        except ValidationError:
-            obj = None
-        return obj
+    def read(cls, product_id=None):
+        if product_id:
+            try:
+                obj = cls.objects.get(id=product_id)
+            except ValidationError:
+                obj = None
+            return obj
+        else:
+            return cls.objects.filter()
 
     @classmethod
     def update(cls, product_id, **kwargs):
@@ -256,12 +262,15 @@ class User(me.Document):
         return cls.objects.create(**kwargs)
 
     @classmethod
-    def read(cls, user_id):
-        try:
-            obj = cls.objects.get(id=user_id)
-        except ValidationError:
-            obj = None
-        return obj
+    def read(cls, user_id=None):
+        if user_id:
+            try:
+                obj = cls.objects.get(id=user_id)
+            except ValidationError:
+                obj = None
+            return obj
+        else:
+            return cls.objects.filter()
 
     @classmethod
     def update(cls, user_id, **kwargs):
@@ -363,9 +372,15 @@ class Text(me.Document):
     body = me.StringField(min_length=1, max_length=4096)
 
     @classmethod
-    def get_text(cls, title):
-        body = Text.objects.get(title=title).body
-        return body
+    def get_text(cls, text_id=None):
+        if text_id:
+            try:
+                obj = cls.objects.get(id=text_id)
+            except ValidationError:
+                obj = None
+            return obj
+        else:
+            return cls.objects.filter()
 
     @classmethod
     def create(cls, **kwargs):

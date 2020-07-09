@@ -7,8 +7,11 @@ import json
 
 class CategoryResource(Resource):
 
-    def get(self, category_id):
-        return json.loads(CategorySchema().dumps(Category.read(category_id=category_id)))
+    def get(self, category_id=None):
+        if category_id:
+            return json.loads(CategorySchema().dumps(Category.read(category_id=category_id)))
+        else:
+            return [json.loads(CategorySchema().dumps(obj)) for obj in Category.read()]
 
     def post(self, parent_id=None):
         data = json.dumps(request.json)
@@ -33,8 +36,11 @@ class CategoryResource(Resource):
 
 class ProductResource(Resource):
 
-    def get(self, product_id):
-        return json.loads(ProductSchema().dumps(Product.read(product_id)))
+    def get(self, product_id=None):
+        if product_id:
+            return json.loads(ProductSchema().dumps(Product.read(product_id)))
+        else:
+            return [json.loads(ProductSchema().dumps(obj)) for obj in Product.read()]
 
     def post(self):
         data = json.dumps(request.json)
@@ -55,8 +61,11 @@ class ProductResource(Resource):
 
 class UserResource(Resource):
 
-    def get(self, user_id):
-        return json.loads(UserSchema().dumps(User.read(user_id)))
+    def get(self, user_id=None):
+        if user_id:
+            return json.loads(UserSchema().dumps(User.read(user_id)))
+        else:
+            return [json.loads(UserSchema().dumps(obj)) for obj in User.read()]
 
     def post(self):
         data = json.dumps(request.json)
@@ -102,8 +111,11 @@ class OrderResource(Resource):
 
 class TextResource(Resource):
 
-    def get(self, text_id):
-        return json.loads(TextSchema().dumps(Text.read(text_id)))
+    def get(self, text_id=None):
+        if text_id:
+            return json.loads(TextSchema().dumps(Text.read(text_id)))
+        else:
+            return [json.loads(TextSchema().dumps(obj)) for obj in Text.read()]
 
     def post(self):
         data = json.dumps(request.json)
