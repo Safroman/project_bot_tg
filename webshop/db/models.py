@@ -306,7 +306,8 @@ class Order(me.Document):
 
     @classmethod
     def place_order(cls, user):
-        Order.objects.create(user=user, phone=user.phone, products=user.cart)
+        date = datetime.datetime.now()
+        Order.objects.create(user=user, phone=user.phone, time_stamp=date, products=user.cart)
 
     def plus_order(self, product):
         self.products.append(product)
