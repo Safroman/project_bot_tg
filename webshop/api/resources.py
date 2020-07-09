@@ -77,7 +77,7 @@ class UserResource(Resource):
 
 class OrderResource(Resource):
 
-    def get(self, order_id):
+    def get(self, order_id=None):
         if order_id:
             return json.loads(OrderSchema().dumps(Order.read(order_id)))
         else:
