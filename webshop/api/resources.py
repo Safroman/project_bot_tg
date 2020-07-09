@@ -81,7 +81,7 @@ class OrderResource(Resource):
         if order_id:
             return json.loads(OrderSchema().dumps(Order.read(order_id)))
         else:
-            return json.loads(OrderSchema().dumps(Order.read()))
+            return [json.loads(OrderSchema().dumps(obj)) for obj in Order.read()]
 
     def post(self):
         data = json.dumps(request.json)
