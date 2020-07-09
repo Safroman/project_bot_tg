@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint
+from flask import Blueprint
 from flask_restful import Api
 from .resources import *
 
@@ -22,6 +22,7 @@ api.add_resource(UserResource, '/users', '/users/<user_id>', '/users/new')
 api.add_resource(TextResource, '/texts', '/texts/<text_id>', '/texts/new')
 api.add_resource(OrderResource, '/orders', '/orders/<order_id>', '/orders/new')
 
-"""
+
 if __name__ == '__main__':
     app.run(debug=True)
+"""

@@ -55,11 +55,8 @@ class ProductResource(Resource):
 
 class UserResource(Resource):
 
-    def get(self, user_id=None):
-        if user_id:
-            return json.loads(UserSchema().dumps(User.read(user_id)))
-        else:
-            return json.loads(User.read(user_id))
+    def get(self, user_id):
+        return json.loads(UserSchema().dumps(User.read(user_id)))
 
     def post(self):
         data = json.dumps(request.json)
@@ -81,7 +78,10 @@ class UserResource(Resource):
 class OrderResource(Resource):
 
     def get(self, order_id):
-        return json.loads(OrderSchema().dumps(Order.read(order_id)))
+        if order_id:
+            return json.loads(OrderSchema().dumps(Order.read(order_id)))
+        else:
+            return json.loads(OrderSchema().dumps(Order.read()))
 
     def post(self):
         data = json.dumps(request.json)
