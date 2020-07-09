@@ -256,12 +256,15 @@ class User(me.Document):
         return cls.objects.create(**kwargs)
 
     @classmethod
-    def read(cls, user_id):
-        try:
-            obj = cls.objects.get(name=user_id)
-        except ValidationError:
-            obj = None
-        return obj
+    def read(cls, user_id=None):
+        if user_id:
+            try:
+                obj = cls.objects.get(id=user_id)
+            except ValidationError:
+                obj = None
+            return obj
+        else:
+            return cls.objects.filter()
 
     @classmethod
     def update(cls, user_id, **kwargs):
