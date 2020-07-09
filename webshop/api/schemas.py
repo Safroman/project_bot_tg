@@ -63,7 +63,7 @@ class OrderSchema(Schema):
     id = fields.String(dump_only=True)
     user = fields.Nested(lambda: UserSchema(only=("phone", "name", "surname", "address")))
     phone = fields.String()
-    timestamp = fields.DateTime(format='%Y-%m-%dT%H:%M:%S')
+    timestamp = fields.DateTime(dump_only=True)
     products = fields.List(fields.Nested(lambda: ProductSchema(only=("id", "title"))))
 
 
