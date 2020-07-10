@@ -58,22 +58,34 @@ class Category(me.Document):
     @classmethod
     def create(cls, **kwargs):
         data = dict(**kwargs)
-        if 'subcategories_id' in data.keys():
-            try:
-                data['subcategories'] = [Category.objects.get(id=_id) for _id in data['subcategories_id']]
-            except KeyError:
-                pass
-            finally:
-                del data['subcategories_id']
-        if 'parent_id' in data.keys():
-            try:
-                data['parent'] = Category.objects.get(id=data['parent_id'])
-            except KeyError:
-                pass
-            finally:
-                del data['parent_id']
+        parent_id = None
+        subcategory_ids = []
 
-        return cls.objects.create(**data)
+        if 'parent_id' in data.keys():
+            parent_id = data['parent_id']
+            del data['parent_id']
+        if 'subcategories_id' in data.keys():
+            subcategory_ids = data['subcategories_id']
+            del data['subcategories_id']
+
+        obj = cls.objects.create(**data)
+
+        if parent_id:
+            try:
+                parent_obj = Category.objects.get(id=parent_id)
+            except KeyError:
+                pass
+            else:
+                parent_obj.add_subcategory(obj)
+        if subcategory_ids:
+            try:
+                subcategory_objs = [Category.objects.get(id=_id) for _id in data['subcategories_id']]
+            except KeyError:
+                pass
+            else:
+                for subcategory in subcategory_objs:
+                    obj.add_subcategory(subcategory)
+        return obj
 
     @classmethod
     def read(cls, category_id=None):
