@@ -79,11 +79,11 @@ class Category(me.Document):
                 parent_obj.add_subcategory(obj)
         if subcategory_ids:
             try:
-                subcategory_objs = [Category.objects.get(id=_id) for _id in data['subcategories_id']]
+                subcategories_obj = [Category.objects.get(id=_id) for _id in data['subcategories_id']]
             except KeyError:
                 pass
             else:
-                for subcategory in subcategory_objs:
+                for subcategory in subcategories_obj:
                     obj.add_subcategory(subcategory)
         return obj
 
