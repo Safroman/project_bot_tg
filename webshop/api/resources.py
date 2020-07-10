@@ -13,15 +13,11 @@ class CategoryResource(Resource):
         else:
             return [json.loads(CategorySchema().dumps(obj)) for obj in Category.read()]
 
-    def post(self, parent_id=None):
+    def post(self):
         data = json.dumps(request.json)
-        if parent_id:
-            parent_obj = Category.objects.get(id=parent_id)
-        else:
-            parent_obj = None
         try:
             data = CategorySchema().loads(data)
-            category = Category.create(parent_obj, **data)
+            category = Category.create(**data)
             res = json.loads(CategorySchema().dumps(category))
         except ValidationError as err:
             res = err.messages

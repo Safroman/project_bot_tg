@@ -25,7 +25,7 @@ me.connect('webshop_db')
 class Category(me.Document):
 
     title = me.StringField(min_length=1, max_length=512)
-    description = me.StringField(min_length=2, max_lenght=4096, default='')
+    description = me.StringField(min_length=1, max_lenght=4096, default='')
     subcategories = me.ListField(me.ReferenceField('self'), default=[])
     parent = me.ReferenceField('self')
 
@@ -56,10 +56,12 @@ class Category(me.Document):
         return bool(self.parent)
 
     @classmethod
-    def create(cls, parent_obj, **kwargs):
+    def create(cls, **kwargs):
         data = dict(**kwargs)
-        if parent_obj:
-            data['parent'] = parent_obj
+        data['subcategories_id'] = [Category.objects.get(id=_id) for _id in data['subcategories_id']]
+        data['parent'] = Category.objects.get(id=data['parent_id'])
+        del data['parent_id']
+        del data['subcategories_id']
         return cls.objects.create(**data)
 
     @classmethod
@@ -115,7 +117,7 @@ class Attrs(me.EmbeddedDocument):
 class Product(me.Document):
 
     title = me.StringField(min_length=1, max_length=512)
-    description = me.StringField(min_length=2, max_length=4096)
+    description = me.StringField(min_length=1, max_length=4096)
     created = me.DateTimeField(default=datetime.datetime.now())
     price = me.DecimalField(required=True)
     discount = me.IntField(min_value=0, max_value=100, default=0)
