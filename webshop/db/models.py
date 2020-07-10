@@ -372,7 +372,15 @@ class Text(me.Document):
     body = me.StringField(min_length=1, max_length=4096)
 
     @classmethod
-    def get_text(cls, text_id=None):
+    def get_text(cls, title):
+        return cls.objects.get(title=title)
+
+    @classmethod
+    def create(cls, **kwargs):
+        cls.objects.create(**kwargs)
+
+    @classmethod
+    def read(cls, text_id=None):
         if text_id:
             try:
                 obj = cls.objects.get(id=text_id)
@@ -381,18 +389,6 @@ class Text(me.Document):
             return obj
         else:
             return cls.objects.filter()
-
-    @classmethod
-    def create(cls, **kwargs):
-        cls.objects.create(**kwargs)
-
-    @classmethod
-    def read(cls, text_id):
-        try:
-            obj = cls.objects.get(id=text_id)
-        except ValidationError:
-            obj = None
-        return obj
 
     @classmethod
     def update(cls, text_id, **kwargs):
