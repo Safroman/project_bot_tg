@@ -6,9 +6,7 @@ import mongoengine as me
 def init_text(titles):
 
     for key, value in titles.items():
-        Text.objects.create(
-            title=key,
-            body=value)
+        Text.objects.create(title=key, body=value)
 
 
 def init_categories():
@@ -25,7 +23,8 @@ def init_categories():
         Category.objects.create(
             title=key,
             description=value,
-            subcategories=[])
+            subcategories=[]
+        )
 
     subcategories = {
         "Продукты": ["Фрукты", "Овощи", "Напитки"],
@@ -207,7 +206,7 @@ def init_products():
             items = products[subcat.title]
             for data in items:
                 data["price"] = randint(1, 10) * 10
-                if randint(0, 100) > 80:
+                if randint(0, 100) > 90:
                     discount = choice(discounts)
                 else:
                     discount = 0

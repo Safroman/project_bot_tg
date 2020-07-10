@@ -1,5 +1,5 @@
 START_KB = {
-    'discount_products': 'Товары со скидкой',
+    'discount_products': 'Скидки',
     'my_cart': 'Моя корзина',
     'categories': 'Категории'
 }
