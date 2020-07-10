@@ -34,5 +34,4 @@ if VERSION == 'production':
 else:
     bot.remove_webhook()
     start_bot()
-    bot.polling()
     app.run(debug=True)

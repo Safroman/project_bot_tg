@@ -208,55 +208,6 @@ def category_click(call):
                                caption=f'{product.title}\n{product.description}\n{price_text}', reply_markup=kb)
 
 
-"""
-    if not lookup == root_lookup:
-        category = Category.objects.get(id=lookup)
-
-    if lookup == root_lookup:
-        buttons = [InlineKeyboardButton(cat.title, callback_data=f'{category_lookup}{separator}{cat.id}')
-                   for cat in Category.get_root_categories()]
-        kb.add(*buttons)
-        text = Text.get_text('root_categories')
-        bot.edit_message_text(text=text, chat_id=call.message.chat.id,
-                              message_id=call.message.message_id, reply_markup=kb)
-
-    elif category.is_parent:
-        subcategories = category.subcategories
-        buttons = [InlineKeyboardButton(cat.title, callback_data=f'{category_lookup}{separator}{cat.id}')
-                   for cat in subcategories]
-        kb.row(*buttons)
-
-        text = Text.get_text('subcategories').split()
-        text.insert(2, category.title)
-        text = ' '.join(text)
-
-        if category.has_parent:
-            kb.row(InlineKeyboardButton('Назад', callback_data=f'{category_lookup}{separator}{category.parent.id}'))
-        elif not category.has_parent:
-            kb.row(InlineKeyboardButton('Назад', callback_data=f'{category_lookup}{separator}{root_lookup}'))
-
-        bot.edit_message_text(text=text, chat_id=call.message.chat.id,
-                              message_id=call.message.message_id, reply_markup=kb)
-
-    else:
-        products = category.get_products()
-        txt = Text.get_text('products_text') + str(category.title)
-        bot.edit_message_text(text=txt, chat_id=call.message.chat.id, message_id=call.message.message_id)
-        for product in products:
-            kb = InlineKeyboardMarkup()
-            button = InlineKeyboardButton(PRODUCTS_KB['to_cart'],
-                                          callback_data=f'{order_lookup}{separator}{product.id}')
-            kb.add(button)
-            if product.discount:
-                price_text = f'{product.price} Цена со скидкой - {product.extended_price}'
-            else:
-                price_text = product.extended_price
-            bot.send_photo(call.message.chat.id, product.image,
-                           caption=f'{product.title}\n{product.description}\n{price_text}', reply_markup=kb)
-
-"""
-
-
 @bot.callback_query_handler(func=lambda call: call.data.split(separator)[0] == order_lookup)
 def order_click(call):
     user = User.get_user(message_chat_id=str(call.message.chat.id))
