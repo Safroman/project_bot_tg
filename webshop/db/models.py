@@ -60,12 +60,12 @@ class Category(me.Document):
         data = dict(**kwargs)
         if 'subcategories_id' in data.keys():
             try:
-                data['subcategories_id'] = [Category.objects.get(id=_id) for _id in data['subcategories_id']]
+                data['subcategories'] = [Category.objects.get(id=_id) for _id in data['subcategories_id']]
             except KeyError:
                 pass
             finally:
                 del data['subcategories_id']
-        if 'parent' in data.keys():
+        if 'parent_id' in data.keys():
             try:
                 data['parent'] = Category.objects.get(id=data['parent_id'])
             except KeyError:
