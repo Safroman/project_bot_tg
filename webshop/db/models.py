@@ -373,7 +373,7 @@ class Text(me.Document):
 
     @classmethod
     def get_text(cls, title):
-        return cls.objects.get(title=title)
+        return cls.objects.get(title=title).body
 
     @classmethod
     def create(cls, **kwargs):
