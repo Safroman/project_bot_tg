@@ -58,10 +58,14 @@ class Category(me.Document):
     @classmethod
     def create(cls, **kwargs):
         data = dict(**kwargs)
-        data['subcategories_id'] = [Category.objects.get(id=_id) for _id in data['subcategories_id']]
-        data['parent'] = Category.objects.get(id=data['parent_id'])
-        del data['parent_id']
-        del data['subcategories_id']
+        try:
+            data['subcategories_id'] = [Category.objects.get(id=_id) for _id in data['subcategories_id']]
+            data['parent'] = Category.objects.get(id=data['parent_id'])
+            del data['parent_id']
+            del data['subcategories_id']
+        except KeyError:
+            pass
+
         return cls.objects.create(**data)
 
     @classmethod
