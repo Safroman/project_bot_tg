@@ -1,6 +1,6 @@
 TOKEN = '1399394345:AAF7rRRsTI__DizdH3lf7OKN5A9BPp1Ai8E'
-# GLOBAL_IP = '34.78.227.221'
-GLOBAL_IP = 'sys.algtrd.com'
+GLOBAL_IP = '34.78.227.221'
+# GLOBAL_IP = 'sys.algtrd.com'
 WEBHOOK_PATH = '/initiator'
 SIGNALS_PATH = '/initiator/send_signal'
 STATUS_PATH = '/initiator/status'
