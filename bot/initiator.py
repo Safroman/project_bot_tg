@@ -24,14 +24,14 @@ if version == 'production':
             abort(403)
 
 
-    # @app.route(SIGNALS_PATH, methods=['POST'])
-    # def sending_signals():
-    #     signal_path = request.form['signal_path']
-    #     exchange = request.form['exchange']
-    #     strategy = request.form['strategy']
-    #     pair = request.form['pair']
-    #     send_signal(signal_path, exchange, strategy, pair)
-    #     return ''
+    @app.route(SIGNALS_PATH, methods=['POST'])
+    def sending_signals():
+        signal_path = request.form['signal_path']
+        exchange = request.form['exchange']
+        strategy = request.form['strategy']
+        pair = request.form['pair']
+        send_signal(signal_path, exchange, strategy, pair)
+        return ''
 
 
     @app.route(NOTIFICATION_PATH, methods=['POST'])

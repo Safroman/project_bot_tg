@@ -542,7 +542,7 @@ def checkout(message):
 def send_signal(signal_path=None, exchange=None, strategy=None, pair=None):
 
     chat_id = '390188983'
-    bot.send_message(chat_id, 'test')
+    bot.send_message(chat_id, f'{signal_path}-{exchange}-{strategy}-{pair}')
 
     # receivers = Users.get_receivers(exchange, strategy, pair)
     # users = Users.read()
