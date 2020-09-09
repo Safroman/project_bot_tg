@@ -1,8 +1,9 @@
 import requests
 
-GLOBAL_IP = '34.78.227.221'
-LOCAL_IP = '127.0.0.1:5000'
-PATH = 'initiator/send_notification'
+# GLOBAL_IP = 'https://34.78.227.221'
+
+GLOBAL_IP = 'https://sys.algtrd.com'
+PATH = '/initiator/send_notification'
 
 pic_folder = 'some_folder'
 pic_name = 'some_name'
@@ -15,7 +16,11 @@ pair = 'test_pair'
 #           'exchange': exchange,
 #           'strategy': strategy,
 #           'pair': pair}
+chat_id = ['390188983', '886841530']
+text = ''
 
-params = {'text': 'some_text'}
 
-requests.post((GLOBAL_IP + PATH), data=params)
+params = {'chat_id': '390188983',
+          'text': 'some_text'}
+r = requests.post((GLOBAL_IP + PATH), data=params)
+print(r)

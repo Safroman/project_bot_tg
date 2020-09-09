@@ -563,7 +563,7 @@ def send_signal(signal_path=None, exchange=None, strategy=None, pair=None):
     #         time.sleep(0.5)
 
 
-def send_notification(text='default'):
+def send_notification(chat_id, text='default'):
 
     chat_id = '390188983'
     bot.send_message(chat_id, text)

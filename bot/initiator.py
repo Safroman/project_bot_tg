@@ -36,10 +36,7 @@ if version == 'production':
 
     @app.route(NOTIFICATION_PATH, methods=['POST'])
     def chk_status():
-        if request.form['text']:
-            send_notification(request.form['text'])
-        else:
-            send_notification()
+        send_notification(request.form['chat_id'], request.form['text'])
         return ''
 
 
