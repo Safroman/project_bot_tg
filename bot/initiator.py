@@ -38,8 +38,8 @@ if version == 'production':
     def send_notification():
         chat_id = request.form['chat_id']
         text = request.form['text']
-        send_notification(chat_id, text)
-        return text
+        send_notification(chat_id=chat_id, text=text)
+        return ''
 
 
     bot.remove_webhook()
