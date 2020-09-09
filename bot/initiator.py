@@ -42,7 +42,7 @@ if version == 'production':
     bot.remove_webhook()
     time.sleep(1)
 
-    bot.set_webhook((WEBHOOK_URL + WEBHOOK_PATH),
+    bot.set_webhook(WEBHOOK_URL,
                     certificate=open(CERT_NAME, 'r'))
 
 else:
