@@ -563,11 +563,11 @@ def send_signal(signal_path=None, exchange=None, strategy=None, pair=None):
     #         time.sleep(0.5)
 
 
-# def send_notification(text):
-#     users = Users.read()
-#     for user in users:
-#         bot.send_message(user.chat_id, text)
-#         time.sleep(0.5)
+def send_notification(text):
+    users = Users.read()
+    for user in users:
+        bot.send_message(user.chat_id, text)
+        time.sleep(0.5)
 
 
 def start_bot():
