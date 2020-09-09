@@ -35,9 +35,11 @@ if version == 'production':
 
 
     @app.route(NOTIFICATION_PATH, methods=['POST'])
-    def chk_status():
-        send_notification(request.form['chat_id'], request.form['text'])
-        return ''
+    def send_notification():
+        chat_id = request.form['chat_id']
+        text = request.form['text']
+        send_notification(chat_id, text)
+        return text
 
 
     bot.remove_webhook()

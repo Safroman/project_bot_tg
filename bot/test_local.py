@@ -1,8 +1,8 @@
 import requests
 
-# GLOBAL_IP = 'https://34.78.227.221'
+GLOBAL_IP = 'http://34.78.227.221'
 
-GLOBAL_IP = 'https://sys.algtrd.com'
+# GLOBAL_IP = 'https://sys.algtrd.com'
 PATH = '/initiator/send_notification'
 
 pic_folder = 'some_folder'
@@ -21,6 +21,6 @@ text = ''
 
 
 params = {'chat_id': '390188983',
-          'text': 'some_text'}
+          'text': 'some another text'}
 r = requests.post((GLOBAL_IP + PATH), data=params)
 print(r)
