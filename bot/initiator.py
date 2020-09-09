@@ -36,9 +36,8 @@ if version == 'production':
 
     @app.route(NOTIFICATION_PATH, methods=['POST'])
     def send_notification():
-        chat_id = request.form['chat_id']
-        text = request.form['text']
-        send_notification(chat_id=chat_id, text=text)
+        chat_id, text = request.form['chat_id'], request.form['text']
+        send_notification(chat_id, text)
         return ''
 
 
