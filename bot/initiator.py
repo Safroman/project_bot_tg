@@ -1,5 +1,5 @@
 from main import start_bot, bot, send_signal, send_notification
-from config import WEBHOOK_PATH, SIGNALS_PATH, STATUS_PATH, WEBHOOK_URL, CERT_NAME
+from config import WEBHOOK_PATH, SIGNALS_PATH, STATUS_PATH, NOTIFICATION_PATH, WEBHOOK_URL, CERT_NAME
 from flask import Flask, request, abort
 from telebot.types import Update
 import time
@@ -32,11 +32,15 @@ if version == 'production':
     #     pair = request.form['pair']
     #     send_signal(signal_path, exchange, strategy, pair)
     #     return ''
-    #
-    #
-    # @app.route(STATUS_PATH, methods=['GET'])
-    # def chk_status():
-    #     return 'OK'
+
+
+    @app.route(NOTIFICATION_PATH, methods=['POST'])
+    def chk_status():
+        if request.form['text']:
+            send_notification(request.form['text'])
+        else:
+            send_notification()
+        return ''
 
 
     bot.remove_webhook()
