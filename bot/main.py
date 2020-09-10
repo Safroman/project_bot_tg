@@ -567,8 +567,12 @@ def send_signal(signal_path, exchange, strategy, pair):
 def send_notification(text, chat_id=None):
     log = []
     if chat_id:
-        bot.send_message(chat_id, text)
-        log.append(f'{chat_id} - OK')
+        try:
+            bot.send_message(chat_id, text)
+            log.append(f'{chat_id} - OK')
+        except Exception as e:
+            log.append(f'{chat_id} - {e}')
+            pass
     else:
         users = Users.read()
         for user in users:
