@@ -21,7 +21,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/send_message.py" />
   </component>
-  <component name="RunManager" selected="Python.send_message">
+  <component name="RunManager" selected="Python.test_local">
     <configuration name="send_message" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="bot" />
       <option name="INTERPRETER_OPTIONS" value="" />
