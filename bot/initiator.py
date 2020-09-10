@@ -38,7 +38,7 @@ if version == 'production':
     def sending_notification():
         chat_id = request.form['chat_id']
         text = request.form['text']
-        send_notification(chat_id, text)
+        send_notification(text, chat_id)
         return ''
 
 
