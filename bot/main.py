@@ -18,7 +18,7 @@ logging.basicConfig(format='%(filename)s[LINE:%(lineno)d]# %(levelname)-8s [%(as
 def start(message):
 
     if Users.objects.filter(user_id=str(message.chat.id)):
-        cb = f"initiate{SP}existing"
+        cb = f'initiate{SP}existing'
     else:
         if len(message.text.split()) > 1:
             cb = f'initiate{SP}{message.text.split()[1]}'
