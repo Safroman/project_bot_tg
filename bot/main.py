@@ -539,39 +539,48 @@ def checkout(message):
                          reply_markup=kb)
 
 
-def send_signal(signal_path=None, exchange=None, strategy=None, pair=None):
+def send_signal(signal_path, exchange, strategy, pair):
 
     chat_id = '390188983'
-    bot.send_message(chat_id, f'{signal_path}-{exchange}-{strategy}-{pair}')
+    receivers = Users.read(user_id=chat_id)
+    users = []
 
     # receivers = Users.get_receivers(exchange, strategy, pair)
     # users = Users.read()
-    #
-    # with open(signal_path, 'rb') as file:
-    #     for user in receivers:
-    #         pic = file.read()
-    #         payment = user.active_payment()
-    #         if payment.is_valid:
-    #             bot.send_photo(chat_id=user.chat_id, photo=pic)
-    #             time.sleep(0.5)
-    #         file.seek(0)
-    #
-    # for user in users:
-    #     payment = user.active_payment()
-    #     if payment.payment_end_date < datetime.datetime.now():
-    #         bot.send_message(user.chat_id, SUBSCRIPTION_EXPIRED[user.lang])
-    #         time.sleep(0.5)
+
+    with open(signal_path, 'rb') as file:
+        for user in receivers:
+            pic = file.read()
+            payment = user.active_payment()
+            if payment.is_valid:
+                bot.send_photo(chat_id=user.chat_id, photo=pic)
+                time.sleep(0.5)
+            file.seek(0)
+
+    for user in users:
+        payment = user.active_payment()
+        if payment.payment_end_date < datetime.datetime.now():
+            bot.send_message(user.chat_id, SUBSCRIPTION_EXPIRED[user.lang])
+            time.sleep(0.5)
 
 
-def send_notification(chat_id, text='default'):
-
-    # chat_id = '390188983'
-    bot.send_message(chat_id, text)
-
-    # users = Users.read()
-    # for user in users:
-    #     bot.send_message(user.chat_id, text)
-    #     time.sleep(0.5)
+def send_notification(text, chat_id=None):
+    if chat_id:
+        bot.send_message(chat_id, text)
+    else:
+        log = []
+        users = Users.read()
+        for user in users:
+            try:
+                bot.send_message(user.chat_id, text)
+                log.append(f'{user.chat_id} - OK')
+                time.sleep(0.5)
+            except Exception as e:
+                log.append(f'{user.chat_id} - {e}')
+                continue
+        with open('notification_log.txt', 'w') as file:
+            for user in log:
+                file.write(user + '\n')
 
 
 def start_bot():
