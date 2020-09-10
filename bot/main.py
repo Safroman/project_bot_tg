@@ -580,8 +580,7 @@ def send_notification(text, chat_id=None):
                 log.append(f'{user.chat_id} - {e}')
                 continue
     with open('notification_log.txt', 'w') as file:
-        for user in log:
-            file.write(user + '\n')
+        file.write('\n'.join(log))
 
 
 def start_bot():
