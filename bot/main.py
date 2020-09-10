@@ -565,10 +565,11 @@ def send_signal(signal_path, exchange, strategy, pair):
 
 
 def send_notification(text, chat_id=None):
+    log = []
     if chat_id:
         bot.send_message(chat_id, text)
+        log.append(f'{chat_id} - OK')
     else:
-        log = []
         users = Users.read()
         for user in users:
             try:
@@ -578,9 +579,9 @@ def send_notification(text, chat_id=None):
             except Exception as e:
                 log.append(f'{user.chat_id} - {e}')
                 continue
-        with open('notification_log.txt', 'w') as file:
-            for user in log:
-                file.write(user + '\n')
+    with open('notification_log.txt', 'w') as file:
+        for user in log:
+            file.write(user + '\n')
 
 
 def start_bot():
