@@ -1,6 +1,6 @@
 import requests
 
-GLOBAL_IP = 'https://sys.algtrd.com'
+# GLOBAL_IP = 'https://sys.algtrd.com'
 
 PATH = '/initiator/send_notification'
 

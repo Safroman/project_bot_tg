@@ -6,12 +6,12 @@ from models import *
 import datetime
 import time
 import copy
+import logging
 
 
 bot = TeleBot(TOKEN)
-logger = logger
-logger.basicConfig(format='%(filename)s[LINE:%(lineno)d]# %(levelname)-8s [%(asctime)s]  %(message)s',
-                   level=logging.DEBUG, filename='bot_log.log')
+logging.basicConfig(format='%(filename)s[LINE:%(lineno)d]# %(levelname)-8s [%(asctime)s]  %(message)s',
+                    level=logging.DEBUG, filename='bot_log.log')
 
 
 @bot.message_handler(commands=['start'])
