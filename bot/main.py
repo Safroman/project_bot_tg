@@ -62,6 +62,7 @@ def initiate(call):
 
     bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
     bot.send_message(call.message.chat.id, GREETINGS[user.lang], reply_markup=kb, parse_mode='markdown')
+    bot.send_message(call.message.chat.id, GREETINGS_2[user.lang], parse_mode='markdown')
 
 
 """
@@ -541,12 +542,8 @@ def checkout(message):
 
 def send_signal(signal_path, exchange, strategy, pair):
 
-    chat_id = '390188983'
-    receivers = Users.read(user_id=chat_id)
-    users = []
-
-    # receivers = Users.get_receivers(exchange, strategy, pair)
-    # users = Users.read()
+    receivers = Users.get_receivers(exchange, strategy, pair)
+    users = Users.read()
 
     with open(signal_path, 'rb') as file:
         for user in receivers:
@@ -566,6 +563,7 @@ def send_signal(signal_path, exchange, strategy, pair):
 
 def send_notification(text, chat_id=None):
     log = []
+
     if chat_id:
         try:
             bot.send_message(chat_id, text)
@@ -581,7 +579,7 @@ def send_notification(text, chat_id=None):
                 log.append(f'{user.chat_id} - OK')
                 time.sleep(0.5)
             except Exception as e:
-                log.append(f'{user.chat_id} - {e}')
+                log.append(f'{user.chat_id}, - {e}') 
                 continue
     with open('notification_log.txt', 'w') as file:
         file.write('\n'.join(log))

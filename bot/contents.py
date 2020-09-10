@@ -49,6 +49,12 @@ GREETINGS = {'RU': "\U00002757 \U00002668 *Добро пожаловать в Al
                    "\U000027A1 Contact for questions: [@AlgTrd_support](URL)"
              }
 
+GREETINGS_2 = {'RU': '\U000026A0 Для активации тестового периода напишите *"буду тестировать"* '
+                     'вот сюда \U000027A1 [@AlgTrd_support](URL)',
+               'EN': '\U000026A0 To activate your test period send *"will test"* '
+                     'to \U000027A1 [@AlgTrd_support](URL)'}
+
+
 SP = '-'
 START_KB = {'account': {'RU': 'Аккаунт(Оплата)', 'EN': 'Account(Payment)'},
             'signals': {'RU': 'Сигналы', 'EN': 'Signals'},
