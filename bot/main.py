@@ -583,7 +583,7 @@ def send_notification(text, chat_id=None):
         finally:
             with open('notification_log.txt', 'a+') as log:
                 log.write('\n' + log_data)
-        time.sleep(10)
+        time.sleep(2)
         bot.send_message(chat_id, 'woke_up')
     else:
         users = Users.read()

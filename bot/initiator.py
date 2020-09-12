@@ -31,7 +31,9 @@ if version == 'production':
         exchange = request.form['exchange']
         strategy = request.form['strategy']
         pair = request.form['pair']
-        send_signal(signal_path, exchange, strategy, pair)
+        s_sending = Thread(target=send_signal, args=(signal_path, exchange, strategy, pair))
+        s_sending.start()
+        # send_signal(signal_path, exchange, strategy, pair)
         return ''
 
 
