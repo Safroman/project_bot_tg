@@ -3,6 +3,7 @@ from config import WEBHOOK_PATH, SIGNALS_PATH, STATUS_PATH, NOTIFICATION_PATH, W
 from flask import Flask, request, abort
 from telebot.types import Update
 import time
+from threading import Thread
 
 
 version = 'production'
@@ -38,7 +39,11 @@ if version == 'production':
     def sending_notification():
         chat_id = request.form['chat_id']
         text = request.form['text']
-        send_notification(text, chat_id)
+        n_sending = Thread(target=send_notification, args=(text, chat_id))
+        n_sending.start()
+        n_sending.join()
+        # send_notification(text, chat_id)
+
         return ''
 
 

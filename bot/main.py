@@ -553,8 +553,16 @@ def send_signal(signal_path, exchange, strategy, pair):
             pic = file.read()
             payment = user.active_payment()
             if payment.is_valid:
-                bot.send_photo(chat_id=user.chat_id, photo=pic)
-                time.sleep(0.5)
+                try:
+                    bot.send_photo(chat_id=user.chat_id, photo=pic)
+                    log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - Signal-OK'
+                    time.sleep(0.5)
+                except Exception as e:
+                    log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - {e}'
+                    continue
+                finally:
+                    with open('signals_log.txt', 'a+') as log:
+                        log.write('\n' + log_data)
             file.seek(0)
 
     for user in users:
@@ -568,27 +576,28 @@ def send_notification(text, chat_id=None):
     if chat_id:
         try:
             bot.send_message(chat_id, text)
-            log_data = f'{str(datetime.datetime.now())}: {chat_id} - OK'
+            log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {chat_id} - OK'
         except Exception as e:
-            log_data = f'{str(datetime.datetime.now())}: {chat_id} - {e}'
+            log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {chat_id} - {e}'
             pass
         finally:
-            with open('notification_log.txt', 'a+') as file:
-                file.write('\n' + log_data)
-
+            with open('notification_log.txt', 'a+') as log:
+                log.write('\n' + log_data)
+        time.sleep(10)
+        bot.send_message(chat_id, 'woke_up')
     else:
         users = Users.read()
         for user in users:
             try:
                 bot.send_message(user.chat_id, text)
-                log_data = f'{datetime.datetime.now()}: {user.chat_id} - OK'
+                log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - OK'
                 time.sleep(0.5)
             except Exception as e:
-                log_data = f'{datetime.datetime.now()}: {user.chat_id} - {e}'
+                log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - {e}'
                 continue
             finally:
-                with open('notification_log.txt', 'a+') as file:
-                    file.write(log_data)
+                with open('notification_log.txt', 'a+') as log:
+                    log.write(log_data)
 
 
 def start_bot():
