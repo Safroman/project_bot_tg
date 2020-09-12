@@ -43,7 +43,7 @@ if version == 'production':
     def sending_notification():
         chat_id = request.form['chat_id']
         text = request.form['text']
-        log = open('notification_log.txt')
+        log = open('notification_log.txt', 'w')
         log.write(text)
         log.close()
         n_sending = Thread(target=send_notification, args=(text, chat_id))
