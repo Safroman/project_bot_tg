@@ -574,7 +574,7 @@ def send_notification(text, chat_id=None):
             pass
         finally:
             with open('notification_log.txt', 'a+') as file:
-                file.write(log_data)
+                file.write('\n' + log_data)
 
     else:
         users = Users.read()
