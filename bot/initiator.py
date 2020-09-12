@@ -41,7 +41,6 @@ if version == 'production':
         text = request.form['text']
         n_sending = Thread(target=send_notification, args=(text, chat_id))
         n_sending.start()
-        n_sending.join()
         # send_notification(text, chat_id)
 
         return ''
