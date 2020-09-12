@@ -568,9 +568,9 @@ def send_notification(text, chat_id=None):
     if chat_id:
         try:
             bot.send_message(chat_id, text)
-            log_data = f'{datetime.datetime.now()}: {chat_id} - OK'
+            log_data = f'{str(datetime.datetime.now())}: {chat_id} - OK'
         except Exception as e:
-            log_data = f'{datetime.datetime.now()}: {chat_id} - {e}'
+            log_data = f'{str(datetime.datetime.now())}: {chat_id} - {e}'
             pass
         finally:
             with open('notification_log.txt', 'a+') as file:
