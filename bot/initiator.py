@@ -1,5 +1,5 @@
 from main import start_bot, bot, send_signal, send_notification
-from config import WEBHOOK_PATH, SIGNALS_PATH, STATUS_PATH, NOTIFICATION_PATH, WEBHOOK_URL, CERT_NAME
+from config import WEBHOOK_PATH, SIGNALS_PATH, NOTIFICATION_PATH, STATUS_PATH, WEBHOOK_URL, CERT_NAME
 from flask import Flask, request, abort
 from telebot.types import Update
 import time
@@ -31,9 +31,11 @@ if version == 'production':
         exchange = request.form['exchange']
         strategy = request.form['strategy']
         pair = request.form['pair']
+        log = open('signals_log.txt', 'w')
+        log.write(signal_path)
+        log.close()
         s_sending = Thread(target=send_signal, args=(signal_path, exchange, strategy, pair))
         s_sending.start()
-        # send_signal(signal_path, exchange, strategy, pair)
         return ''
 
 
@@ -41,18 +43,23 @@ if version == 'production':
     def sending_notification():
         chat_id = request.form['chat_id']
         text = request.form['text']
+        log = open('notification_log.txt')
+        log.write(text)
+        log.close()
         n_sending = Thread(target=send_notification, args=(text, chat_id))
         n_sending.start()
-        # send_notification(text, chat_id)
-
         return ''
+
+    @app.route(STATUS_PATH, methods=['GET'])
+    def chk_status():
+        return 'OK'
 
 
     bot.remove_webhook()
     time.sleep(1)
 
-    bot.set_webhook(WEBHOOK_URL,
-                    certificate=open('webhook_cert.pem', 'r'))
+    bot.set_webhook((WEBHOOK_URL + WEBHOOK_PATH),
+                    certificate=open(CERT_NAME, 'r'))
 
 else:
     bot.remove_webhook()

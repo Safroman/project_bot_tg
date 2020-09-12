@@ -6,12 +6,9 @@ from models import *
 import datetime
 import time
 import copy
-import logging
 
 
 bot = TeleBot(TOKEN)
-logging.basicConfig(format='%(filename)s[LINE:%(lineno)d]# %(levelname)-8s [%(asctime)s]  %(message)s',
-                    level=logging.DEBUG, filename='bot_log.log')
 
 
 @bot.message_handler(commands=['start'])
@@ -65,6 +62,7 @@ def initiate(call):
 
     bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
     bot.send_message(call.message.chat.id, GREETINGS[user.lang], reply_markup=kb, parse_mode='markdown')
+    time.sleep(1)
     bot.send_message(call.message.chat.id, GREETINGS_2[user.lang], parse_mode='markdown')
 
 
@@ -556,9 +554,9 @@ def send_signal(signal_path, exchange, strategy, pair):
                 try:
                     bot.send_photo(chat_id=user.chat_id, photo=pic)
                     log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - Signal-OK'
-                    time.sleep(0.5)
+                    time.sleep(1)
                 except Exception as e:
-                    log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - {e}'
+                    log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - Signal-{e}'
                     continue
                 finally:
                     with open('signals_log.txt', 'a+') as log:
@@ -568,8 +566,15 @@ def send_signal(signal_path, exchange, strategy, pair):
     for user in users:
         payment = user.active_payment()
         if payment.payment_end_date < datetime.datetime.now():
-            bot.send_message(user.chat_id, SUBSCRIPTION_EXPIRED[user.lang])
-            time.sleep(0.5)
+            try:
+                bot.send_message(user.chat_id, SUBSCRIPTION_EXPIRED[user.lang])
+                log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - Reminder-OK'
+                time.sleep(1)
+            except Exception as e:
+                log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - Reminder-{e}'
+            finally:
+                with open('signals_log.txt', 'a+') as log:
+                    log.write('\n' + log_data)
 
 
 def send_notification(text, chat_id=None):
@@ -583,21 +588,20 @@ def send_notification(text, chat_id=None):
         finally:
             with open('notification_log.txt', 'a+') as log:
                 log.write('\n' + log_data)
-        time.sleep(2)
-        bot.send_message(chat_id, 'woke_up')
+        time.sleep(1)
     else:
         users = Users.read()
         for user in users:
             try:
                 bot.send_message(user.chat_id, text)
                 log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - OK'
-                time.sleep(0.5)
+                time.sleep(1)
             except Exception as e:
                 log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - {e}'
                 continue
             finally:
                 with open('notification_log.txt', 'a+') as log:
-                    log.write(log_data)
+                    log.write('\n' + log_data)
 
 
 def start_bot():
