@@ -565,27 +565,30 @@ def send_signal(signal_path, exchange, strategy, pair):
 
 
 def send_notification(text, chat_id=None):
-    log = []
-
     if chat_id:
         try:
             bot.send_message(chat_id, text)
-            log.append(f'{chat_id} - OK')
+            log_data = f'{datetime.datetime.now()}: {chat_id} - OK'
         except Exception as e:
-            log.append(f'{chat_id} - {e}')
+            log_data = f'{datetime.datetime.now()}: {chat_id} - {e}'
             pass
+        finally:
+            with open('notification_log.txt', 'a+') as file:
+                file.write(log_data)
+
     else:
         users = Users.read()
         for user in users:
             try:
                 bot.send_message(user.chat_id, text)
-                log.append(f'{user.chat_id} - OK')
+                log_data = f'{datetime.datetime.now()}: {user.chat_id} - OK'
                 time.sleep(0.5)
             except Exception as e:
-                log.append(f'{user.chat_id}, - {e}') 
+                log_data = f'{datetime.datetime.now()}: {user.chat_id} - {e}'
                 continue
-    with open('notification_log.txt', 'w') as file:
-        file.write('\n'.join(log))
+            finally:
+                with open('notification_log.txt', 'a+') as file:
+                    file.write(log_data)
 
 
 def start_bot():
