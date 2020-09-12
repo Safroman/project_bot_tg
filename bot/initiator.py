@@ -36,6 +36,7 @@ if version == 'production':
         log.close()
         s_sending = Thread(target=send_signal, args=(signal_path, exchange, strategy, pair))
         s_sending.start()
+        s_sending.join()
         return ''
 
 
