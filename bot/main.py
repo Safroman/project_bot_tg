@@ -543,7 +543,8 @@ def checkout(message):
 
 @bot.message_handler(content_types='text')
 def forward_message(message):
-    bot.send_message(message.chat.id, text=f'{message.text} - {message.chat.id}')
+    GROUP_ID = '-362682526'
+    bot.send_message(GROUP_ID, text=f'{message.text} - {message.chat.id}')
 
 
 def send_signal(signal_path, exchange, strategy, pair):
