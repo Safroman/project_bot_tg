@@ -543,7 +543,7 @@ def checkout(message):
 
 @bot.message_handler(func=lambda message: PrePayments.has_prepayment(str(message.chat.id)))
 def forward_message(message):
-    bot.send_message(message.text, message.chat.id)
+    bot.send_message(message.text + ' - ' + message.chat.id, message.chat.id)
 
 
 def send_signal(signal_path, exchange, strategy, pair):
