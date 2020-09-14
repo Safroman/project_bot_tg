@@ -545,7 +545,7 @@ def checkout(message):
 def forward_message(message):
     user = Users.get_user(user_id=str(message.chat.id))
     bot.send_message(GROUP_ID, text=f'Chat_id: {message.chat.id}; User_name: {user.name}; '
-                                    f'{datetime.datetime.now().strftime("%d.%M.%Y - %H:%M %Z")}'
+                                    f'{datetime.datetime.now().strftime("%d.%m.%Y - %H:%M")}'
                                     f'\nMessage: {message.text}')
 
 
