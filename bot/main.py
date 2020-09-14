@@ -541,6 +541,11 @@ def checkout(message):
                          reply_markup=kb)
 
 
+@bot.message_handler(func=lambda message: PrePayments.has_prepayment(str(message.chat.id)))
+def forward_message(message):
+    bot.send_message(message.text, message.chat.id)
+
+
 def send_signal(signal_path, exchange, strategy, pair):
 
     receivers = Users.get_receivers(exchange, strategy, pair)
