@@ -79,7 +79,7 @@ def f_price(price):
         return '.'.join([p[0], p[1][0:5]])
 
 
-@bot.message_handler(content_types='text', func=lambda message: message.text.split()[-1] in START_KB['account'].values())
+@bot.message_handler(content_types='text', func=lambda message: message.text in START_KB['account'].values())
 def show_account(message):
 
     user = Users.get_user(user_id=str(message.chat.id))
@@ -543,7 +543,7 @@ def checkout(message):
 
 @bot.message_handler(func=lambda message: PrePayments.has_prepayment(str(message.chat.id)))
 def forward_message(message):
-    bot.send_message(message.text + ' - ' + message.chat.id, message.chat.id)
+    bot.send_message(message.chat.id, text=(message.text + ' - ' + message.chat.id))
 
 
 def send_signal(signal_path, exchange, strategy, pair):

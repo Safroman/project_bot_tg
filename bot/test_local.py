@@ -1,10 +1,10 @@
 import requests
 
-# GLOBAL_IP = 'http://34.78.227.221'
-GLOBAL_IP = 'https://sys.algtrd.com'
+GLOBAL_IP = 'http://34.78.227.221'
+# GLOBAL_IP = 'https://sys.algtrd.com'
 
-PATH = '/initiator/send_signal'
-# PATH = '/initiator/send_notification'
+# PATH = '/initiator/send_signal'
+PATH = '/initiator/send_notification'
 
 pic_folder = ''
 pic_name = 'test_signal.jpg'
