@@ -541,7 +541,7 @@ def checkout(message):
                          reply_markup=kb)
 
 
-@bot.message_handler(func=lambda message: PrePayments.has_prepayment(str(message.chat.id)))
+@bot.message_handler(content_types='text')
 def forward_message(message):
     bot.send_message(message.chat.id, text=(message.text + ' - ' + message.chat.id))
 
