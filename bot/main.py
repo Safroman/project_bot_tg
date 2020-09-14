@@ -1,6 +1,6 @@
 from telebot import TeleBot
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
-from config import TOKEN, RATES, WALLETS
+from config import TOKEN, RATES, WALLETS, GROUP_ID
 from contents import *
 from models import *
 import datetime
@@ -541,10 +541,11 @@ def checkout(message):
                          reply_markup=kb)
 
 
-@bot.message_handler(content_types='text')
+@bot.message_handler(content_types='text', func=lambda message: message.chat.id != GROUP_ID)
 def forward_message(message):
-    GROUP_ID = '-362682526'
-    bot.send_message(GROUP_ID, text=f'{message.text} - {message.chat.id}')
+    user = Users.get_user(user_id=str(message.chat.id))
+    bot.send_message(GROUP_ID, text=f'Chat_id: {message.chat.id}; User_name: {user.name}; {datetime.datetime.now()}'
+                                    f'\nMessage: {message.text}')
 
 
 def send_signal(signal_path, exchange, strategy, pair):

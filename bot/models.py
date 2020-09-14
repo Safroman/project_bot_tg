@@ -159,6 +159,10 @@ class Users(me.Document):
     def chat_id(self):
         return self.user_id
 
+    @property
+    def name(self):
+        return self.user_name
+
 
 class Payments(me.Document):
 

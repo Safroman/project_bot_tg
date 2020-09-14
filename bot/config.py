@@ -12,6 +12,7 @@ DB_NAME = 'trading_bot_DB'
 # HOST_NAME = 'mongodb://algtrd:sieNg4ta@db.algtrd.com:27017/?compressors=zlib&ssl=true'
 # BOT_NAME = 'AlgTrdSignals_bot'
 BOT_NAME = 'SR_dev_bot'
+GROUP_ID = '-362682526'
 # WALLET = '"номер_кошелька"'
 WALLETS = {'BTC': '15XzssKWUjfRrRjvcRYgo3StfUbpbNYzaT',
            'ERC20': '0x28a04f9338f5fb71300637a38ec624fe7efe2202',
