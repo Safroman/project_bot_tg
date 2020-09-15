@@ -541,12 +541,31 @@ def checkout(message):
                          reply_markup=kb)
 
 
-@bot.message_handler(content_types='text', func=lambda message: message.chat.id != GROUP_ID)
+def is_reply_to_bot(m):
+    if m.reply_to_message:
+        return str(m.chat.id) == GROUP_ID and m.reply_to_message.from_user.is_bot
+    else:
+        return False
+
+
+# @bot.message_handler(func=lambda message: str(message.chat.id) == GROUP_ID and message.reply_to_message.from_user.is_bot)
+@bot.message_handler(func=is_reply_to_bot)
+def reply_to_user(message):
+    print(message.text)
+    print(message.reply_to_message.forward_from)
+    try:
+        bot.send_message(message.reply_to_message.forward_from.id, message.text)
+    except Exception:
+        pass
+
+
+@bot.message_handler(content_types='text', func=lambda message: str(message.chat.id) != GROUP_ID)
 def forward_message(message):
-    user = Users.get_user(user_id=str(message.chat.id))
-    bot.send_message(GROUP_ID, text=f'Chat_id: {message.chat.id}; User_name: {user.name}; '
-                                    f'{datetime.datetime.now().strftime("%d.%m.%Y - %H:%M")}'
-                                    f'\nMessage: {message.text}')
+    # user = Users.get_user(user_id=str(message.chat.id))
+    bot.forward_message(GROUP_ID, message.chat.id, message.message_id)
+    # bot.send_message(GROUP_ID, text=f'Chat_id: {message.chat.id}; User_name: {user.name}; '
+    #                                 f'{datetime.datetime.now().strftime("%d.%m.%Y - %H:%M")}'
+    #                                 f'\nMessage: {message.text}')
 
 
 def send_signal(signal_path, exchange, strategy, pair):

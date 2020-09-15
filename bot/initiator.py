@@ -6,8 +6,8 @@ import time
 from threading import Thread
 
 
-version = 'production'
-# version = 'develop'
+# version = 'production'
+version = 'develop'
 
 
 app = Flask(__name__)
