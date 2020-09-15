@@ -57,7 +57,7 @@ def initiate(call):
             pass
 
     kb = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-    kb.add(*[KeyboardButton(text=START_KB_PICS[button] + ' ' + START_KB[button][user.lang])
+    kb.add(*[KeyboardButton(text=START_KB[button][user.lang])
              for button in START_KB.keys()])
 
     bot.delete_message(chat_id=call.message.chat.id, message_id=call.message.message_id)
@@ -79,7 +79,7 @@ def f_price(price):
         return '.'.join([p[0], p[1][0:5]])
 
 
-@bot.message_handler(content_types='text', func=lambda message: message.text.split()[-1] in START_KB['account'].values())
+@bot.message_handler(content_types='text', func=lambda message: message.text in START_KB['account'].values())
 def show_account(message):
 
     user = Users.get_user(user_id=str(message.chat.id))
@@ -319,7 +319,7 @@ SIGNALS
 """
 
 
-@bot.message_handler(content_types='text', func=lambda message: message.text.split()[-1] in START_KB['signals'].values())
+@bot.message_handler(content_types='text', func=lambda message: message.text in START_KB['signals'].values())
 def show_signals(message):
 
     user = Users.get_user(user_id=str(message.chat.id))
@@ -431,7 +431,7 @@ def show_currencies(call):
         bot.edit_message_text(text, call.message.chat.id, call.message.message_id, reply_markup=kb)
 
 
-@bot.message_handler(content_types='text', func=lambda message: message.text.split()[-1] in START_KB['statistics'].values())
+@bot.message_handler(content_types='text', func=lambda message: message.text in START_KB['statistics'].values())
 def show_statistics(message):
 
     user = Users.get_user(user_id=str(message.chat.id))
@@ -479,7 +479,7 @@ def show_strategies(call):
             bot.send_photo(chat_id=user.chat_id, photo=pic)
 
 
-@bot.message_handler(content_types='text', func=lambda message: message.text.split()[-1] in START_KB['following'].values())
+@bot.message_handler(content_types='text', func=lambda message: message.text in START_KB['following'].values())
 def show_following(message):
 
     user = Users.get_user(user_id=str(message.chat.id))
@@ -494,7 +494,7 @@ def show_following(message):
     user.last_message(lm.message_id)
 
 
-@bot.message_handler(content_types='text', func=lambda message: message.text.split()[-1] in START_KB['help'].values())
+@bot.message_handler(content_types='text', func=lambda message: message.text in START_KB['help'].values())
 def show_help(message):
 
     user = Users.get_user(user_id=str(message.chat.id))
@@ -515,7 +515,7 @@ def checkout(message):
     txid = message.text
     if txid in ABORT_BUTTON.values():
         kb = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-        kb.add(*[KeyboardButton(text=START_KB_PICS[button] + ' ' + START_KB[button][user.lang])
+        kb.add(*[KeyboardButton(text=START_KB[button][user.lang])
                  for button in START_KB.keys()])
         bot.send_message(message.chat.id, HELP_TEXT[user.lang], reply_markup=kb)
         PrePayments.cancel(str(message.chat.id))
@@ -531,7 +531,7 @@ def checkout(message):
         PrePayments.cancel(str(message.chat.id))
 
         kb = ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-        kb.add(*[KeyboardButton(text=START_KB_PICS[button] + ' ' + START_KB[button][user.lang])
+        kb.add(*[KeyboardButton(text=START_KB[button][user.lang])
                  for button in START_KB.keys()])
         bot.send_message(message.chat.id, PAID_TEXT[user.lang], reply_markup=kb)
     else:

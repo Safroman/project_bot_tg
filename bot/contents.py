@@ -56,17 +56,22 @@ GREETINGS_2 = {'RU': '\U000026A0 Для активации тестового п
 
 
 SP = '-'
-START_KB = {'account': {'RU': 'Аккаунт(Оплата)', 'EN': 'Account(Payment)'},
-            'signals': {'RU': 'Сигналы', 'EN': 'Signals'},
-            'statistics': {'RU': 'Статистика', 'EN': 'Statistics'},
-            'following': {'RU': 'Автоследование', 'EN': 'Following'},
-            'help': {'RU': 'Поддержка', 'EN': 'Support'}
-            }
 START_KB_PICS = {'account': u'\U0001F464',
                  'signals': u'\U0001F4E3',
                  'statistics': u'\U0001F4C8',
                  'following': u'\U0001F465',
                  'help': u'\U0001F4AC'}
+START_KB = {'account': {'RU': START_KB_PICS['account'] + ' Аккаунт(Оплата)',
+                        'EN': START_KB_PICS['account'] + ' Account(Payment)'},
+            'signals': {'RU': START_KB_PICS['signals'] + ' Сигналы',
+                        'EN': START_KB_PICS['signals'] + ' Signals'},
+            'statistics': {'RU': START_KB_PICS['statistics'] + ' Статистика',
+                           'EN': START_KB_PICS['statistics'] + ' Statistics'},
+            'following': {'RU': START_KB_PICS['following'] + ' Автоследование',
+                          'EN': START_KB_PICS['following'] + ' Following'},
+            'help': {'RU': START_KB_PICS['help'] + ' Поддержка',
+                     'EN': START_KB_PICS['help'] + ' Support'}
+            }
 
 BACK_IND = 'back'
 BACK_BUTTON = {'RU': 'назад',
