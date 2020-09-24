@@ -24,6 +24,7 @@ class Users(me.Document):
     referrals = me.ListField(me.ReferenceField('self'))
     last_message_id = me.StringField()
     txid_requested = me.IntField(default=0)
+    blocked = me.IntField(default=0)
 
     @classmethod
     def create(cls, **kwargs):
@@ -160,8 +161,12 @@ class Users(me.Document):
         return self.user_id
 
     @property
-    def name(self):
-        return self.user_name
+    def is_blocked(self):
+        return self.is_blocked
+
+    def set_blocked(self, val):
+        self.blocked = val
+        self.save()
 
 
 class Payments(me.Document):
@@ -243,3 +248,17 @@ class PrePayments(me.Document):
             return True
         else:
             return False
+
+
+if __name__ == '__main__':
+    block_list = '390188983'
+    b_list = block_list.split(',')
+
+    def block():
+        users = Users.read()
+        for user in users:
+            user.set_blocked(1)
+            if user.chat_id not in block_list:
+                user.set_blocked(0)
+
+    block()

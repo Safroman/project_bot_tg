@@ -13,13 +13,13 @@ strategy = 'Trend_4h'
 pair = 'XBT'
 
 
-params = {'signal_path': (pic_folder + pic_name),
-          'exchange': exchange,
-          'strategy': strategy,
-          'pair': pair}
+# params = {'signal_path': (pic_folder + pic_name),
+#           'exchange': exchange,
+#           'strategy': strategy,
+#           'pair': pair}
 
-# params = {'chat_id': '',
-#           'text': 'Сигнал Тестовый - простите за беспокойство!'}
+params = {'chat_id': '12345',
+          'text': 'Сигнал Тестовый - простите за беспокойство!'}
 
 # chat_id = ['390188983', '886841530']
 
