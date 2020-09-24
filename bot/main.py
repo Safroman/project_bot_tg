@@ -6,6 +6,7 @@ from models import *
 import datetime
 import time
 import copy
+from telegram.error import (TelegramError, Unauthorized, BadRequest)
 
 
 bot = TeleBot(TOKEN)
@@ -603,9 +604,12 @@ def send_notification(text, chat_id=None):
         try:
             bot.send_message(chat_id, text)
             log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {chat_id} - OK'
+        except BadRequest as e:
+            bot.send_message('390188983', e)
+            pass
         except Exception as e:
             log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {chat_id} - {e}'
-            bot.send_message('390188983', e)
+            bot.send_message('390188983', e.text)
             pass
         finally:
             with open('notification_log.txt', 'a+') as log:
