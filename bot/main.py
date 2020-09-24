@@ -605,7 +605,6 @@ def send_notification(text, chat_id=None):
             log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {chat_id} - OK'
         except Exception as e:
             log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {chat_id} - {e}'
-            bot.send_message('390188983', f'{exc_type}, {exc_value}, {exc_traceback}')
             bot.send_message('390188983', e.message)
             pass
         finally:
