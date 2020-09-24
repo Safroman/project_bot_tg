@@ -605,7 +605,8 @@ def send_notification(text, chat_id=None):
             log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {chat_id} - OK'
         except Exception as e:
             log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {chat_id} - {e}'
-            bot.send_message('390188983', e.message)
+            if 'chat not found' in str(e):
+                bot.send_message('390188983', e)
             pass
         finally:
             with open('notification_log.txt', 'a+') as log:
