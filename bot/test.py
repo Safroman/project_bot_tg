@@ -1,5 +1,4 @@
-import re
+from main import send_notification
 
-var = 'notify_all ,kf,kf ,kf,dfnvs'
-req = re.split(r' ', var, maxsplit=1)
-print(req)
+
+send_notification('text', unpaid_only=True)

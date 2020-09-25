@@ -18,7 +18,7 @@ pair = 'XBT'
 #           'strategy': strategy,
 #           'pair': pair}
 
-params = {'chat_id': '12345',
+params = {'chat_id': '390188983',
           'text': 'Сигнал Тестовый - простите за беспокойство!'}
 
 # chat_id = ['390188983', '886841530']

@@ -4,10 +4,10 @@ import datetime
 from config import DB_NAME, BOT_NAME
 from contents import *
 
-# me.connect(DB_NAME, host='mongodb://algtrd:sieNg4ta@db.algtrd.com:27017/?compressors=zlib&ssl=true',
-#            authentication_source='admin')
+me.connect(DB_NAME, host='mongodb://algtrd:sieNg4ta@db.algtrd.com:27017/?compressors=zlib&ssl=true',
+           authentication_source='admin')
 
-me.connect(DB_NAME)
+# me.connect(DB_NAME)
 
 
 class Users(me.Document):
@@ -251,14 +251,6 @@ class PrePayments(me.Document):
 
 
 if __name__ == '__main__':
-    block_list = '390188983'
-    b_list = block_list.split(',')
 
-    def block():
-        users = Users.read()
-        for user in users:
-            user.set_blocked(1)
-            if user.chat_id not in block_list:
-                user.set_blocked(0)
-
-    block()
+    active = Users.objects(blocked=0)
+    print(len(active))

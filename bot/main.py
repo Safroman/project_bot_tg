@@ -598,15 +598,13 @@ def send_signal(signal_path, exchange, strategy, pair):
                     log.write('\n' + log_data)
 
 
-def send_notification(text, chat_id=None):
+def send_notification(text, chat_id=None, unpaid_only=None):
     if chat_id:
         try:
             bot.send_message(chat_id, text)
             log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {chat_id} - OK'
         except Exception as e:
             log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {chat_id} - {e}'
-            if 'chat not found' in str(e):
-                bot.send_message('390188983', e)
             pass
         finally:
             with open('notification_log.txt', 'a+') as log:
@@ -615,16 +613,29 @@ def send_notification(text, chat_id=None):
     else:
         users = Users.read()
         for user in users:
-            try:
-                bot.send_message(user.chat_id, text)
-                log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - OK'
-                time.sleep(1)
-            except Exception as e:
-                log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - {e}'
-                continue
-            finally:
-                with open('notification_log.txt', 'a+') as log:
-                    log.write('\n' + log_data)
+            if not user.is_blocked:
+                payment = user.active_payment()
+                if unpaid_only and payment.type in ['paid', 'following']:
+                    log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - paid'
+                    with open('notification_log.txt', 'a+') as log:
+                        log.write('\n' + log_data)
+                    continue
+                elif unpaid_only and payment.end_date > (datetime.datetime.now() + datetime.timedelta(days=1)):
+                    log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - active'
+                    with open('notification_log.txt', 'a+') as log:
+                        log.write('\n' + log_data)
+                    continue
+                else:
+                    try:
+                        bot.send_message(user.chat_id, text)
+                        log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - OK'
+                        time.sleep(0.5)
+                    except Exception as e:
+                        log_data = f'{datetime.datetime.now().strftime("%Y-%m-%d:%H.%M.%S")}: {user.chat_id} - {e}'
+                        continue
+                    finally:
+                        with open('notification_log.txt', 'a+') as log:
+                            log.write('\n' + log_data)
 
 
 def start_bot():
