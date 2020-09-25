@@ -162,7 +162,7 @@ class Users(me.Document):
 
     @property
     def is_blocked(self):
-        return self.is_blocked
+        return self.blocked
 
     def set_blocked(self, val):
         self.blocked = val

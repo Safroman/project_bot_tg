@@ -639,6 +639,14 @@ def send_notification(text, chat_id=None, unpaid_only=None):
 
 
 def start_bot():
+    text = 'test'
+    chat_id = None
+    unpaid_only = True
+    log = open('notification_log.txt', 'w')
+    log.write(text)
+    log.close()
+    print('CP1')
+    send_notification(text, chat_id, unpaid_only)
     bot.polling()
 
 
