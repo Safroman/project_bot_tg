@@ -4,10 +4,10 @@ import datetime
 from config import DB_NAME, BOT_NAME
 from contents import *
 
-me.connect(DB_NAME, host='mongodb://algtrd:sieNg4ta@db.algtrd.com:27017/?compressors=zlib&ssl=true',
-           authentication_source='admin')
+# me.connect(DB_NAME, host='mongodb://algtrd:sieNg4ta@db.algtrd.com:27017/?compressors=zlib&ssl=true',
+#            authentication_source='admin')
 
-# me.connect(DB_NAME)
+me.connect(DB_NAME)
 
 
 class Users(me.Document):
