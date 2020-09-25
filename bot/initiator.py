@@ -6,8 +6,8 @@ import time
 from threading import Thread
 
 
-version = 'production'
-# version = 'develop'
+# version = 'production'
+version = 'develop'
 
 
 app = Flask(__name__)
@@ -66,3 +66,4 @@ else:
     bot.remove_webhook()
     time.sleep(1)
     start_bot()
+
